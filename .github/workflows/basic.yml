@@ -23,4 +23,14 @@ jobs:
         continue-on-error: true
 
       - name: summarize results
-        run: ./scripts/summarize_results.sh
+        run: |
+          ./scripts/summarize_results.sh > ./test_summary.txt
+          cat ./test_summary.txt
+      
+      - name: Upload Test Summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-summary
+          path: ./test_summary.txt
+      
+      
