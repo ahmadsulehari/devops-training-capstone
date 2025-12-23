@@ -1,10 +1,24 @@
 name: basic workflow
 
-on: push
+on: 
+  pull_request:
+    branches:
+      - main
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
+    env:
+      WORKING_DIR: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
-      - name: Say Hello
-        run: echo "Hello, World!"
+      - name: activate the environment and run tests
+        run: |
+          chmod +x $WORKING_DIR/scripts/venv.sh
+          chmod +x $WORKING_DIR/scripts/run_tests.sh
+          chmod +x $WORKING_DIR/app/test_main.py
+          chmod +x $WORKING_DIR/scripts/summarize_results.sh
+          source $WORKING_DIR/scripts/venv.sh
+          bash $WORKING_DIR/scripts/run_tests.sh
+          bash $WORKING_DIR/scripts/summarize_results.sh
+
+          
