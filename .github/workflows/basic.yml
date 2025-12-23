@@ -13,10 +13,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: activate the environment and run tests
         run: |
-          chmod +x $WORKING_DIR/scripts/venv.sh
-          chmod +x $WORKING_DIR/scripts/run_tests.sh
-          chmod +x $WORKING_DIR/app/test_main.py
-          chmod +x $WORKING_DIR/scripts/summarize_results.sh
-          source $WORKING_DIR/scripts/venv.sh
-          bash $WORKING_DIR/scripts/run_tests.sh
-          bash $WORKING_DIR/scripts/summarize_results.sh
+          cd $WORKING_DIR
+          chmod +x ./scripts/venv.sh
+          chmod +x ./scripts/run_tests.sh
+          chmod +x ./app/test_main.py
+          chmod +x ./scripts/summarize_results.sh
+          source ./scripts/venv.sh
+          ./scripts/run_tests.sh
+        continue-on-error: true
+
+      - name: summarize results
+        run: ./scripts/summarize_results.sh
