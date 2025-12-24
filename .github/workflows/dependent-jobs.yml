@@ -2,20 +2,42 @@ name: dependent jobs workflow
 
 on: 
   workflow_dispatch:
-
+env:
+  CODE: 'workflow level env variable'
 jobs:
   parent-job-1:
     runs-on: ubuntu-24.04
     steps:
-      - run: echo "This is parent job 1"
+    - run: |
+        echo "This is parent job 1"
+        echo "printing value of CODE env var: $CODE"
   parent-job-2:
     runs-on: ubuntu-24.04
+    env:
+      CODE: "overrided the code env variable at job level"
+      MY_VAR: "this is a job level variable" 
     steps:
-      - run: echo "This i parent job 2"
+      - run: | 
+          echo "This i parent job 2"
+          echo "printing value of MY_VAR: $MY_VAR"
+          echo "printing value of CODE: $CODE"
+          echo "ROLE=Dev" >> $GITHUB_ENV 
+      - name: "step to override the job level MY_VAR var"
+        env: 
+          CODE: "overriden the value of code at step level"
+          MY_VAR: "overriden value of my var at step level"
+        run: | 
+          echo " This is the value of CODE: $CODE"
+          echo " This is the value of MY_VAR: $MY_VAR"
+          echo " this env var ROLE was set from within a step run action: $ROLE"
   child-job:
     runs-on: ubuntu-24.04
     needs:
       - parent-job-1
       - parent-job-2
     steps:
-      - run: echo "this is a child job which will only run after job 1 and 2 are complete"
+      - run: |
+          echo "this is a child job which will only run after job 1 and 2 are complete"
+          echo "value of CODE: $CODE"
+          echo "trying to acces my var from the parent job 2 MY_VAR: $MY_VAR"
+          echo "trying to access ROLE env var set from within a run action of another job: $ROLE"
