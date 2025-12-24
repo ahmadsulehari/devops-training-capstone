@@ -1,7 +1,6 @@
 name: dependent jobs workflow
 
-on:
-  workflow_dispatch
+on: push
 
 jobs:
   parent-job-1:
