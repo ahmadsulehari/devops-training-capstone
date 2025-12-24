@@ -1,0 +1,21 @@
+name: dependent jobs workflow
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  parent-job-1:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "This is parent job 1"
+  parent-job-2:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "This i parent job 2"
+  child-job:
+    runs-on: ubuntu-24.04
+    needs:
+      - parent-job-1
+      - parent-job-2
+    steps:
+      - run: echo "this is a child job which will only run after job 1 and 2 are complete"
