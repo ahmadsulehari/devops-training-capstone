@@ -1,0 +1,52 @@
+name: basic workflow
+
+# on: push
+  # pull_request:
+  #   branches:
+  #     - main
+on: [push, workflow_dispatch]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-24.04
+    env:
+      WORKING_DIR: ${{ github.workspace }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: install python version
+        uses: actions/setup-python@v6
+        with:
+            python-version: '3.13' 
+      
+      - name: install dependencies
+        run: |
+          cd $WORKING_DIR
+          echo "$PWD"
+          python --version
+          pip install -r app/requirements.txt
+      
+      - name: create logs directory
+        run: |
+          mkdir logs
+
+      - name: run tests
+        run: |
+          cd $WORKING_DIR/app 
+          TIMESTAMP=$(date +"%F_%H%M%S")
+          python -m pytest -v > logs/pytest_$(TIMESTAMP).txt 2> logs/errors_$(TIMESTAMP).txt
+          
+
+      - name: summarize results
+        if: always()
+        run: |
+          ./scripts/summarize_results.sh > ./test_summary.txt
+          cat ./test_summary.txt
+      
+      - name: Upload Test Summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-summary
+          path: ./test_summary.txt  
