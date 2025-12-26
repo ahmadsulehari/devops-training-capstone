@@ -23,17 +23,16 @@ jobs:
           chmod +x ./scripts/summarize_results.sh
           source ./scripts/venv.sh
           ./scripts/run_tests.sh
-        continue-on-error: true
 
       - name: summarize results
+        if: always()
         run: |
           ./scripts/summarize_results.sh > ./test_summary.txt
           cat ./test_summary.txt
       
       - name: Upload Test Summary
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-summary
-          path: ./test_summary.txt
-      
-      
+          path: ./test_summary.txt  
