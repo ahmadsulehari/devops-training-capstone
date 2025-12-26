@@ -38,13 +38,16 @@ jobs:
           cd $WORKING_DIR/app 
           echo "Running tests in directory: $PWD"
           TIMESTAMP=$(date +"%F_%H%M%S")
-          python -m pytest -v ./test_main.py > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt 2> $WORKING_DIR/logs/pytest_error_${TIMESTAMP}.txt
+          chmod +x ../scripts/run_tests.sh
+          echo "Executing tests and redirecting output to logs..."
+          python -m pytest -v ./test_main.py > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt 2> $WORKING_DIR/logs/error_${TIMESTAMP}.txt
           
 
       - name: summarize results
         if: always()
         run: |
           cd $WORKING_DIR && ls -l logs/
+          chmod +x ./scripts/summarize_results.sh
           echo "Summarizing test results..."
           ./scripts/summarize_results.sh > ./test_summary.txt
           cat ./test_summary.txt
@@ -61,4 +64,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-logs
-          path: ${WORKING_DIR}/logs/
+          path: ./logs/
