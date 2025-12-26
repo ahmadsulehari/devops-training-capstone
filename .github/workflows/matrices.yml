@@ -35,7 +35,7 @@ jobs:
         run: |
           cd $WORKING_DIR/app 
           TIMESTAMP=$(date +"%F_%H%M%S")
-          python -m pytest -v > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt 2> $WORKING_DIR/logs/errors_${TIMESTAMP}.txt
+          python -m pytest -v > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt
           
 
       - name: summarize results
@@ -50,3 +50,10 @@ jobs:
         with:
           name: test-summary
           path: ./test_summary.txt  
+
+      - name: Upload Test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs
+          path: ${WORKING_DIR}/logs/
