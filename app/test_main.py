@@ -14,7 +14,7 @@ def test_read_main():
 def test_say_hello():
     # GIVEN a specific name parameter
     name = "Alice"
-    response = client.get(f"/hell/{name}")
+    response = client.get(f"/hello/{name}")
     
     # THEN it should include the name in the greeting
     assert response.status_code == 200

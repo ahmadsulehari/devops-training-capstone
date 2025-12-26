@@ -9,6 +9,9 @@ on: [push, workflow_dispatch]
 jobs:
   run-tests:
     runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: [3.10, 3.13]
     env:
       WORKING_DIR: ${{ github.workspace }}
     steps:
@@ -18,7 +21,7 @@ jobs:
       - name: install python version
         uses: actions/setup-python@v6
         with:
-            python-version: '3.13' 
+            python-version: ${{ matrix.python-version }} 
       
       - name: install dependencies
         run: |
