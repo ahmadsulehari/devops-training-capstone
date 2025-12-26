@@ -30,17 +30,22 @@ jobs:
       - name: create logs directory
         run: |
           mkdir logs
+          ls -l | grep "logs"
+
 
       - name: run tests
         run: |
           cd $WORKING_DIR/app 
+          echo "Running tests in directory: $PWD"
           TIMESTAMP=$(date +"%F_%H%M%S")
-          python -m pytest -v > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt 2> $WORKING_DIR/logs/pytest_error_${TIMESTAMP}.txt
+          python -m pytest -v ./test_main.py > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt 2> $WORKING_DIR/logs/pytest_error_${TIMESTAMP}.txt
           
 
       - name: summarize results
         if: always()
         run: |
+          cd $WORKING_DIR && ls -l logs/
+          echo "Summarizing test results..."
           ./scripts/summarize_results.sh > ./test_summary.txt
           cat ./test_summary.txt
       
