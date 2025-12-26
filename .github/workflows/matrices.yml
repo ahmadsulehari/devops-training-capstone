@@ -40,7 +40,7 @@ jobs:
           TIMESTAMP=$(date +"%F_%H%M%S")
           chmod +x ../scripts/run_tests.sh
           echo "Executing tests and redirecting output to logs..."
-          python -m pytest -v ./test_main.py > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt 2> $WORKING_DIR/logs/error_${TIMESTAMP}.txt
+          python -m pytest -v ./test_main.py > $WORKING_DIR/logs/pytest_${TIMESTAMP}.log 2> $WORKING_DIR/logs/error_${TIMESTAMP}.log
           
 
       - name: summarize results
@@ -59,9 +59,9 @@ jobs:
           name: test-summary
           path: ./test_summary.txt  
 
-      - name: Upload Test logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-logs
-          path: ./logs/
+    #   - name: Upload Test logs
+    #     if: always()
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: test-logs
+    #       path: ./logs/
