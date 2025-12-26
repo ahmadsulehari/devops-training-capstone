@@ -35,7 +35,7 @@ jobs:
         run: |
           cd $WORKING_DIR/app 
           TIMESTAMP=$(date +"%F_%H%M%S")
-          python -m pytest -v > logs/pytest_${TIMESTAMP}.txt 2> logs/errors_${TIMESTAMP}.txt
+          python -m pytest -v > $WORKING_DIR/logs/pytest_${TIMESTAMP}.txt 2> $WORKING_DIR/logs/errors_${TIMESTAMP}.txt
           
 
       - name: summarize results
