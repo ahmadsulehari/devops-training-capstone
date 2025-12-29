@@ -55,6 +55,8 @@ if [[ -f $project_dir/requirements.txt ]]; then
 	cat $project_dir/requirements.txt
 	pip install -r $project_dir/requirements.txt 1>> $LOG_FILE 2>> $ERR_FILE
     pretty_print "Successfully installed all packages"
+	pretty_print "installed packages are:"
+	pip list
 else
 	echo "[ERROR] requirements file not present" >> $ERR_FILE
 	exit 1

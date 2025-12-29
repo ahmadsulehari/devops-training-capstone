@@ -34,7 +34,9 @@ jobs:
       
       
       - name: install dependencies and set up environment
-        run: source ./scripts/venv.sh
+        run: |
+            source ./scripts/venv.sh
+            echo "which python is being used: $(which python3)"
       
       - name: run tests
         run: ./scripts/run_tests.sh
