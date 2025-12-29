@@ -33,21 +33,21 @@ jobs:
           chmod +x ./scripts/summarize_results.sh
       
       
-      - name: install dependencies and set up environment
+      - name: install dependencies and  set up environment and run tests
         run: |
             source ./scripts/venv.sh
             echo "which python is being used: $(which python3)"
+            echo "running tests"
+            ./scripts/run_tests.sh
       
-      - name: run tests
-        run: ./scripts/run_tests.sh
-
-      - name: summarize results
+      - name: summarize results and archive logs
         if: always()
         run: |
           cd $WORKING_DIR && ls -l logs/
           echo "Summarizing test results..."
           ./scripts/summarize_results.sh > ./test_summary.txt
           cat ./test_summary.txt
+          tar -czvf test-logs-${{matrix.python-version}}.tar.gz ./logs/
       
       - name: Upload Test Summary
         if: always()
@@ -60,5 +60,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-logs-${{matrix.python-version}}
-          path: ./logs/
+          name: test-logs-${{matrix.python-version}}-archive
+          path: ./logs/test-logs-${{matrix.python-version}}.tar.gz
