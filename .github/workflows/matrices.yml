@@ -1,0 +1,70 @@
+name: matrix workflow
+
+# on: push
+  # pull_request:
+  #   branches:
+  #     - main
+on: [workflow_dispatch]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.13"]
+    env:
+      WORKING_DIR: ${{ github.workspace }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: install python version
+        uses: actions/setup-python@v6
+        with:
+            python-version: ${{ matrix.python-version }} 
+      
+      - name: install dependencies
+        run: |
+          cd $WORKING_DIR
+          echo "$PWD"
+          python --version
+          pip install -r app/requirements.txt
+      
+      - name: create logs directory
+        run: |
+          mkdir logs
+          ls -l | grep "logs"
+
+
+      - name: run tests
+        run: |
+          cd $WORKING_DIR/app 
+          echo "Running tests in directory: $PWD"
+          TIMESTAMP=$(date +"%F_%H%M%S")
+          chmod +x ../scripts/run_tests.sh
+          echo "Executing tests and redirecting output to logs..."
+          python -m pytest -v ./test_main.py > $WORKING_DIR/logs/pytest_${TIMESTAMP}.log 2> $WORKING_DIR/logs/error_${TIMESTAMP}.log
+          
+
+      - name: summarize results
+        if: always()
+        run: |
+          cd $WORKING_DIR && ls -l logs/
+          chmod +x ./scripts/summarize_results.sh
+          echo "Summarizing test results..."
+          ./scripts/summarize_results.sh > ./test_summary.txt
+          cat ./test_summary.txt
+      
+      - name: Upload Test Summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-summary-${{matrix.python-version}}
+          path: ./test_summary.txt  
+
+      - name: Upload Test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{matrix.python-version}}
+          path: ./logs/

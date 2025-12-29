@@ -32,7 +32,7 @@ if [[ -s $log_file_path ]]; then
     echo "Failed Tests: ${failed_tests:-0}"
     echo "Skipped Tests: ${skipped_tests:-0}"
     echo "Total time taken: ${total_time:-0s}"
-    echo "Detailed results can be found in the log file: $1"
+    echo "Detailed results can be found in the log file: $log_file_path"
 else
     echo "Log file not found or is empty."
 fi
