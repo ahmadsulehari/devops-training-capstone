@@ -1,4 +1,4 @@
-name: basic workflow
+name: matrix workflow with scripts
 
 # on: push
   # pull_request:
