@@ -62,9 +62,9 @@ jobs:
           name: test-summary-${{matrix.python-version}}
           path: ./test_summary.txt  
 
-    #   - name: Upload Test logs
-    #     if: always()
-    #     uses: actions/upload-artifact@v4
-    #     with:
-    #       name: test-logs
-    #       path: ./logs/
+      - name: Upload Test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-logs-${{matrix.python-version}}
+          path: ./logs/
