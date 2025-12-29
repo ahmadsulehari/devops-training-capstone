@@ -47,7 +47,9 @@ jobs:
           echo "Summarizing test results..."
           ./scripts/summarize_results.sh > ./test_summary.txt
           cat ./test_summary.txt
-          tar -czvf test-logs-${{matrix.python-version}}.tar.gz ./logs/
+          tar -czf test-logs-${{matrix.python-version}}.tar.gz ./logs/
+          echo "Logs archived"
+          ls -l ./logs/
       
       - name: Upload Test Summary
         if: always()
@@ -61,4 +63,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-logs-${{matrix.python-version}}-archive
-          path: ./logs/test-logs-${{matrix.python-version}}.tar.gz
+          path: ./test-logs-${{matrix.python-version}}.tar.gz
