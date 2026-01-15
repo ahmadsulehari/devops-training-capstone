@@ -19,7 +19,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/reports
           chmod 777 ${{ github.workspace }}/reports
-          docker compose up --exit-code-from tests --abort-on-container-exit
+          docker compose up --exit-code-from integration-tests --abort-on-container-exit
       - name: Upload Test Reports
         if: always()
         uses: actions/upload-artifact@v4
