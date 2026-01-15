@@ -1,0 +1,12 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY ./app/ .
+COPY ./tests/ /tests/
+
+WORKDIR /tests
+
+RUN pip install -r requirements.txt -r ../app/requirements.txt
+
+CMD ["pytest", "-v", "test_main.py", "--junitxml=reports/results.xml", "--html=reports/report.html", "--self-contained-html"]

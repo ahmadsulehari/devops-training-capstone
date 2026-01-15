@@ -1,5 +1,13 @@
-__pycache__/
-.pytest_cache/
-app_venv/
+.python-version
+*.tar
+*.gz
+*.log
 logs/
-
+app_venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.DS_Store
+db_data/
+.env
+reports/
