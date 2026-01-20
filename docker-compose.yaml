@@ -1,0 +1,28 @@
+include:
+  - db-service.yaml
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=mysql+pymysql://root:password123@db:3306/test_db
+  integration-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    volumes:
+      - ./reports:/tests/reports
+    depends_on:
+      db:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=mysql+pymysql://root:password123@db:3306/test_db
+      - PYTHONPATH=/app

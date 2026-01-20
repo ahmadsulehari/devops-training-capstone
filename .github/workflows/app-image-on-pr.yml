@@ -1,0 +1,16 @@
+name: app image on PR creation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-image:
+    runs-on: ubuntu
+    steps:
+      - uses: actions/checkout@v4
+      - name: build-image
+        run: |
+          docker build -t my-app .
+          docker images

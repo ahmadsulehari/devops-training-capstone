@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*_venv/
+README.md
+test_main.py
+.pytest_cache

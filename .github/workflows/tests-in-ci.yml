@@ -1,0 +1,30 @@
+name: Run Tests in CI
+
+on: [workflow_dispatch]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: run docker compose
+        run: |
+          mkdir -p ${{ github.workspace }}/reports
+          chmod 777 ${{ github.workspace }}/reports
+          docker compose up --exit-code-from integration-tests --abort-on-container-exit
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: ./reports/report.html
+      - name: Publish Test Reports
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: ./reports/*.xml
